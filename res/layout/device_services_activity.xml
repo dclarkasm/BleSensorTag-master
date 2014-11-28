@@ -1,0 +1,155 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/empty_view"
+        style="@style/NullTextAppearance"
+        android:text="@string/empty_services_list"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignTop="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_services"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textStyle="bold"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:background="@android:drawable/divider_horizontal_bright"
+        android:id="@+id/textView"
+        android:layout_above="@+id/gatt_services_list"
+        android:layout_alignParentStart="true" />
+
+    <ExpandableListView
+        android:id="@+id/gatt_services_list"
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
+        android:groupIndicator="@null"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="97dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actual Distance (Set): "
+        android:id="@+id/actualDistLabel"
+        android:layout_alignBottom="@+id/actualDistVal"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/actualDistVal"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/actualDistLabel"
+        android:layout_alignEnd="@+id/empty_view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="meters"
+        android:id="@+id/actualDistUnitLabel"
+        android:layout_alignTop="@+id/actualDistLabel"
+        android:layout_toEndOf="@+id/empty_view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calculated Distance: "
+        android:id="@+id/calcDistanceLabel"
+        android:layout_below="@+id/actualDistVal"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#.##"
+        android:id="@+id/calcDistVal"
+        android:layout_below="@+id/actualDistLabel"
+        android:layout_toEndOf="@+id/calcDistanceLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" meters"
+        android:id="@+id/calcDistUnitsLabel"
+        android:layout_below="@+id/actualDistVal"
+        android:layout_toEndOf="@+id/calcDistVal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Record"
+        android:id="@+id/startRecordButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:onClick="startRecording"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Record"
+        android:id="@+id/endRecordPoint"
+        android:layout_toEndOf="@+id/pointRecButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="endRecording"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points Recorded: "
+        android:id="@+id/pointsRecLabel"
+        android:layout_below="@+id/calcDistanceLabel"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="##"
+        android:id="@+id/pointsRecVal"
+        android:layout_below="@+id/calcDistanceLabel"
+        android:layout_toEndOf="@+id/pointsRecLabel" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Record Point"
+        android:id="@+id/pointRecButton"
+        android:layout_alignBottom="@+id/startRecordButton"
+        android:layout_toEndOf="@+id/startRecordButton"
+        android:onClick="recordPoint"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:id="@+id/updateButton"
+        android:layout_above="@+id/empty_view"
+        android:layout_alignParentEnd="true"
+        android:onClick="update"/>
+
+
+    <!--
+     <FrameLayout
+         android:layout_width="397dp"
+         android:layout_height="0dp"
+         android:layout_weight="0.01"
+         android:id="@+id/">
+
+
+
+
+
+     </FrameLayout>
+     !-->
+</RelativeLayout>
