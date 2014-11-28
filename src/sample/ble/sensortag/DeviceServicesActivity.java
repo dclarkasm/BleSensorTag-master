@@ -113,10 +113,10 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public void onDisconnected() {
         finish();
-    }
+    }*/
 
     @Override
     public void onServiceDiscovered() {
