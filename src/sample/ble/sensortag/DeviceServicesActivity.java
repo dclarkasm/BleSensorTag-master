@@ -1,8 +1,10 @@
 package sample.ble.sensortag;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -18,7 +20,9 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import sample.ble.sensortag.adapters.BleDevicesAdapter;
 import sample.ble.sensortag.adapters.TiServicesAdapter;
+import sample.ble.sensortag.ble.BleDevicesScanner;
 import sample.ble.sensortag.config.AppConfig;
 import sample.ble.sensortag.fusion.SensorFusionActivity;
 import sample.ble.sensortag.sensor.TiSensor;
@@ -26,6 +30,7 @@ import sample.ble.sensortag.sensor.TiSensors;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -48,6 +53,10 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
     private TiServicesAdapter gattServiceAdapter;
     private BluetoothDevice device;
 
+    private BleDevicesScanner scanner;
+    private BleDevicesAdapter leDeviceListAdapter;
+    private BluetoothAdapter bluetoothAdapter;
+
     private int rssi;
 
     private TiSensor<?> activeSensor;
@@ -64,8 +73,9 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
     String fullyCompiledString = "";
     File reportDirectoryName;
     File myFile;
+    boolean recording;
     Calendar myCalendar;
-    BufferedWriter myOutWriter;
+    FileOutputStream myOutWriter;
 
     String BLELogFileName = "BLE_Distance_LOG.txt";
     //*****************************************************************
@@ -197,55 +207,98 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
 
     public void startRecording(View view)   //opens a file
     {
-        try
-        {
-            BLELogFileName = "BLELog" + myCalendar.getTimeInMillis() + ".txt";
-            reportDirectoryName = new File(Environment.getExternalStorageDirectory(), "/BLELog_Files/");
-            if(!reportDirectoryName.exists()){
-                reportDirectoryName.mkdirs();
-            }
-            myFile = new File(reportDirectoryName, BLELogFileName);
-            myFile.createNewFile();
-            myOutWriter = new BufferedWriter(new FileWriter(myFile));
-        }
-        catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Error opening BLE records File",
-                    Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(getBaseContext(), "Begin Recording...", Toast.LENGTH_SHORT).show();
+        recording = true;
     }
 
     public void update(View view)   //gets the most recent signal strength measurement and updates the displayed values
     {
         //rssiMap.put(device, rssi);        //pass the bluetooth device to get the db level
+        // initialize scanner
+        /*
+        scanner = new BleDevicesScanner(bluetoothAdapter, new BluetoothAdapter.LeScanCallback() {
+            @Override
+            public void onLeScan(final BluetoothDevice mdevice, final int mrssi, byte[] scanRecord) {
+                leDeviceListAdapter.addDevice(mdevice, mrssi);
+                leDeviceListAdapter.notifyDataSetChanged();
+                if(mdevice == device)
+                {
+                    Toast.makeText(getBaseContext(),
+                            "Strength: " + mrssi + " db",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        */
+        //scanner.setScanPeriod(SCAN_PERIOD);
+        if(recording)
+        {
+            Toast.makeText(getBaseContext(), "Updating...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void recordPoint(View view)  //records a new measurement by adding the most recent value to the fully compiled string
     {
-        Log.d("Devon Test", "logging...");
-        actDistString = actDistEdit.getText().toString();   //gets the distance set by the user as string
-        actDistance = Float.parseFloat(actDistString);      //convert to float
-        fullyCompiledString.concat(ptIdx + " Actual: " + actDistance + "Calculated: " + calDistance + "\n");   //concatenate the most recent measurement to the existing data
+        if(recording)
+        {
+            Log.d("Devon Test", "logging...");
+            actDistString = actDistEdit.getText().toString();   //gets the distance set by the user as string
+            actDistance = Float.parseFloat(actDistString);      //convert to float
+            fullyCompiledString.concat(ptIdx + " Actual: " + actDistance + "Calculated: " + calDistance + "\n");   //concatenate the most recent measurement to the existing data
+        }
     }
 
     public void endRecording(View view) //save file and close
     {
-        try     //write all the data to the file
+        Toast.makeText(getBaseContext(),
+                "Saving BLE File...",
+                Toast.LENGTH_SHORT).show();
+        try
         {
-            myOutWriter.write(fullyCompiledString);
-        }
-        catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Error writing to GPS File",
-                    Toast.LENGTH_SHORT).show();
-        }
+            //BLELogFileName = "BLELog" + myCalendar.getTimeInMillis() + ".txt";  //
+            BLELogFileName = "BLELog.txt";
+            Log.d("Dev", BLELogFileName);
+            /*
+            reportDirectoryName = new File(Environment.getRootDirectory(), "/BLELog_Files/");
+            Log.d("Dev", "2");
+            if(!reportDirectoryName.exists()){
+                Log.d("Dev", "3");
+                reportDirectoryName.mkdirs();
+                Log.d("Dev", "4");
+            }
+            Log.d("Dev", "5");
+            myFile = new File(reportDirectoryName, BLELogFileName);
+            Log.d("Dev", "6");
+            myFile.createNewFile();
+            */
+            Log.d("Dev", "7");
+            myOutWriter = openFileOutput(BLELogFileName, Context.MODE_PRIVATE);
+            Log.d("Dev", "8");
 
-        try {   //then close the buffered writer
+            try     //write all the data to the file
+            {
+                Log.d("Dev", "9");
+                myOutWriter.write(fullyCompiledString.getBytes());
+                Log.d("Dev", "10");
+            }
+            catch (Exception e) {
+                Toast.makeText(getBaseContext(), "Error writing to GPS File",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            myOutWriter.close();   //then close the output stream
 
             Toast.makeText(getBaseContext(),
-                    "Saving BLE File...",
+                    "BLE File Saved.",
                     Toast.LENGTH_SHORT).show();
-
-            myOutWriter.close();
-
+        }
+        catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Error opening or closing BLE records File",
+                    Toast.LENGTH_SHORT).show();
+        }
+        recording = false;
+/*
+        try {//
             Toast.makeText(getBaseContext(),
                     "BLE File successfully saved",
                     Toast.LENGTH_SHORT).show();
@@ -253,5 +306,7 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
             Toast.makeText(getBaseContext(), "Error saving BLE File",
                     Toast.LENGTH_SHORT).show();
         }
+*/
     }
+
 }
