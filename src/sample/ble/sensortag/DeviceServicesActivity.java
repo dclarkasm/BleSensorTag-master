@@ -73,7 +73,7 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
         final View emptyView = findViewById(R.id.empty_view);
         gattServicesList.setEmptyView(emptyView);
 
-        dataField = (TextView) findViewById(R.id.data_value);
+        //dataField = (TextView) findViewById(R.id.data_value);
 
         getActionBar().setTitle(getDeviceName());
         getActionBar().setSubtitle(getDeviceAddress());
@@ -110,10 +110,10 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDisconnected() {
-        finish();
-    }
+    //@Override
+    //public void onDisconnected() {
+    //    finish();
+    //}
 
     @Override
     public void onServiceDiscovered() {
@@ -174,10 +174,10 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
 
     }
 
-    public void update(View view)
+    /*public void update(View view)
     {
         rssiMap.put(device, rssi);
-    }
+    }*/
 
     public void recordPoint(View view)
     {
