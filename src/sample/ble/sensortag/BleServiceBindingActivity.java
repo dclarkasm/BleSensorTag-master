@@ -11,7 +11,6 @@ import android.util.Log;
 import sample.ble.sensortag.config.AppConfig;
 import sample.ble.sensortag.ble.BleActionsReceiver;
 import sample.ble.sensortag.ble.BleServiceListener;
-import android.bluetooth.BluetoothDevice;
 
 public class BleServiceBindingActivity extends Activity
                                        implements BleServiceListener,
@@ -20,13 +19,10 @@ public class BleServiceBindingActivity extends Activity
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    public static final String EXTRAS_DEVICE = "DEVICE";
-
 
     private String deviceName;
     private String deviceAddress;
     private BleService bleService;
-    private BluetoothDevice device;
     @SuppressWarnings("ConstantConditions")
     private BroadcastReceiver bleActionsReceiver =
             AppConfig.REMOTE_BLE_SERVICE ? new BleActionsReceiver(this) : null;
@@ -38,11 +34,6 @@ public class BleServiceBindingActivity extends Activity
         final Intent intent = getIntent();
         deviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         deviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-        device = intent.getParcelableExtra(EXTRAS_DEVICE);
-    }
-
-    protected BluetoothDevice getDevice() {
-        return device;
     }
 
     @Override

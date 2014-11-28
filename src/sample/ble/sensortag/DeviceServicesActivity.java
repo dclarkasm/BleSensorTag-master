@@ -40,9 +40,6 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
     private TextView dataField;
     private ExpandableListView gattServicesList;
     private TiServicesAdapter gattServiceAdapter;
-    private BluetoothDevice device;
-
-    private int rssi;
 
     private TiSensor<?> activeSensor;
 
@@ -76,8 +73,8 @@ public class DeviceServicesActivity extends BleServiceBindingActivity
         final View emptyView = findViewById(R.id.empty_view);
         gattServicesList.setEmptyView(emptyView);
 
-        //dataField = (TextView) findViewById(R.id.data_value);
-        device = getDevice();
+        dataField = (TextView) findViewById(R.id.data_value);
+
         getActionBar().setTitle(getDeviceName());
         getActionBar().setSubtitle(getDeviceAddress());
         getActionBar().setDisplayHomeAsUpEnabled(true);

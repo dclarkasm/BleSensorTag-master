@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.os.Parcelable;
 
 import java.util.HashMap;
 
@@ -165,7 +164,6 @@ public class DeviceScanActivity extends ListActivity
         final Intent intent = new Intent(this, DeviceServicesActivity.class);
         intent.putExtra(DeviceServicesActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(DeviceServicesActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
-        intent.putExtra(DeviceServicesActivity.EXTRAS_DEVICE, device);
         startActivity(intent);
     }
 
